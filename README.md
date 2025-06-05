@@ -24,4 +24,5 @@ git clone https://github.com/your-username/laravel-vue-todo.git
 cd laravel-vue-todo
 
 2. Install Backend Dependencies
+```bash
 composer install
