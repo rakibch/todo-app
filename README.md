@@ -4,10 +4,6 @@ This app uses Laravel for backend and Vue.js 3 with Vite for frontend.
 
 ---
 
-## Installation
-
-1. Clone the repo and enter folder:
-
 ```bash
 git clone https://github.com/your-username/laravel-vue-todo.git
 cd laravel-vue-todo
