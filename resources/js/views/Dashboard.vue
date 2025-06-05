@@ -11,7 +11,7 @@
         </button>
       </div>
 
-      <form @submit.prevent="createTodo" class="flex flex-col sm:flex-row gap-4 mb-6">
+      <form @submit.prevent="isEditing ? updateTodo() : createTodo()" class="flex flex-col sm:flex-row gap-4 mb-6">
         <input
           v-model="title"
           type="text"
@@ -27,9 +27,17 @@
         />
         <button
           type="submit"
-          class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition"
+          :class="isEditing ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-indigo-600 hover:bg-indigo-700'"
+          class="px-6 py-2 text-white font-semibold rounded-lg transition"
         >
-          Add
+          {{ isEditing ? 'Update' : 'Add' }}
+        </button>
+        <button
+          v-if="isEditing"
+          @click.prevent="cancelEdit"
+          class="px-6 py-2 bg-gray-300 text-black font-semibold rounded-lg hover:bg-gray-400 transition"
+        >
+          Cancel
         </button>
       </form>
 
@@ -50,12 +58,10 @@
               {{ todo.title }}
             </span>
           </div>
-          <button
-            @click="deleteTodo(todo.id)"
-            class="text-sm text-red-500 hover:underline"
-          >
-            Delete
-          </button>
+          <div class="flex gap-2">
+            <button @click="editTodo(todo)" class="text-sm text-blue-500 hover:underline">Edit</button>
+            <button @click="deleteTodo(todo.id)" class="text-sm text-red-500 hover:underline">Delete</button>
+          </div>
         </li>
       </ul>
 
@@ -78,6 +84,8 @@ const router = useRouter();
 const todos = ref([]);
 const title = ref('');
 const due_date = ref('');
+const isEditing = ref(false);
+const editTodoId = ref(null);
 
 const token = localStorage.getItem('token');
 if (token) {
@@ -105,6 +113,37 @@ const createTodo = async () => {
     toast.success('Todo added!');
   } catch (err) {
     toast.error('Failed to create todo');
+  }
+};
+
+const editTodo = (todo) => {
+  title.value = todo.title;
+  due_date.value = todo.due_date;
+  editTodoId.value = todo.id;
+  isEditing.value = true;
+};
+
+const cancelEdit = () => {
+  title.value = '';
+  due_date.value = '';
+  editTodoId.value = null;
+  isEditing.value = false;
+};
+
+const updateTodo = async () => {
+  try {
+    const res = await axios.put(`/todos/${editTodoId.value}`, {
+      title: title.value,
+      due_date: due_date.value,
+    });
+    const index = todos.value.findIndex((t) => t.id === editTodoId.value);
+    if (index !== -1) {
+      todos.value[index] = res.data;
+    }
+    toast.success('Todo updated!');
+    cancelEdit();
+  } catch (err) {
+    toast.error('Failed to update todo');
   }
 };
 

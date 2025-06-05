@@ -41,7 +41,7 @@ class TodoController extends Controller
         }
         return response()->json($todo);
     }
-     public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
