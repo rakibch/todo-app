@@ -42,7 +42,7 @@ it('stores a new todo for the authenticated user', function () {
 it('shows a specific todo for the authenticated user', function () {
     $todo = Todo::factory()->create(['user_id' => $this->user->id]);
 
-    $response = getJson("/api/todos/{$todo->id}", authHeaders($this->user));
+    $response = $this->getJson("/api/todos/{$todo->id}", authHeaders($this->user));
 
     $response->assertOk()
              ->assertJsonFragment(['id' => $todo->id]);
@@ -53,7 +53,7 @@ it('updates a todo for the authenticated user', function () {
 
     $updateData = ['title' => 'Updated Title'];
 
-    $response = putJson("/api/todos/{$todo->id}", $updateData, authHeaders($this->user));
+    $response = $this->putJson("/api/todos/{$todo->id}", $updateData, authHeaders($this->user));
 
     $response->assertOk()
              ->assertJsonFragment(['title' => 'Updated Title']);
@@ -64,7 +64,7 @@ it('updates a todo for the authenticated user', function () {
 it('deletes a todo for the authenticated user', function () {
     $todo = Todo::factory()->create(['user_id' => $this->user->id]);
 
-    $response = deleteJson("/api/todos/{$todo->id}", [], authHeaders($this->user));
+    $response = $this->deleteJson("/api/todos/{$todo->id}", [], authHeaders($this->user));
 
     $response->assertOk()
              ->assertJson(['message' => 'Todo deleted successfully']);
