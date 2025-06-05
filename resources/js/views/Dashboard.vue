@@ -70,6 +70,7 @@
 import { ref, onMounted } from 'vue';
 import { useToast } from 'vue-toastification';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 const toast = useToast();
 const router = useRouter();
