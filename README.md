@@ -22,7 +22,8 @@ Follow these steps to install and run the project locally:
 ```bash
 git clone https://github.com/your-username/laravel-vue-todo.git
 cd laravel-vue-todo
-
-2. Install Backend Dependencies
 ```bash
+2. Install Backend Dependencies     
 composer install
+
+
